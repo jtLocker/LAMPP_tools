@@ -7,6 +7,8 @@ import subprocess
 def spot(message, css, price):
 	
 	php = price
+
+## i do not like the way forms are being handled - WIP
 	html = """
 	<html>
 	<link href='https://fonts.googleapis.com/css?family=Ubuntu:700italic' rel='stylesheet' type='text/css'>
@@ -15,14 +17,22 @@ def spot(message, css, price):
 	<br/>
 	<div id = "container">{php}</div>
 	<form action = "convert.cgi" method = "post">
-	<input id = "button" type = "submit" value = "Submit"/>
+	<input id = "button" type = "submit" value = "USD -> Satoshis" name = "convert"/>
+	
 	</form>
+
+
+	<form action = "wallet.cgi" method = "post">
+	<input id = "button" type = "submit" value = "Generate Wallet" name = "wallet"/>
+	</form>
+	
+
 	</html>"""
 	return html.format(message=message, css=css, php=php)
 
 message = "$BTC Price"
 
-#
+
 price = subprocess.check_output('php price_web.php', shell=True).decode('utf-8')
 
 css = """<style>#container{

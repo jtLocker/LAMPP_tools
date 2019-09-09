@@ -4,40 +4,48 @@ print("Content-Type: text/html\n")
 import os
 import subprocess
 import cgi
+from pywallet import wallet
+import qrcode
 
-#REQUIRED GLOBAL VARIABLE FOR FUNCTIONS
-form = cgi.FieldStorage()
+# generate 12 word mnemonic seed
+seed = wallet.generate_mnemonic()
 
-def convert(message, css, price, form):
-	
-	inpu = form.getfirst('USD', 1)	
-	usd = float(inpu)
-	price = float(price)
-	calc = "{:,d}".format(int((usd/price)*100000000))
-	concat = str(calc), "sats"
-	out = " ".join(concat)
+# create bitcoin wallet
+wallet = wallet.create_wallet(network="BTCtest", seed=seed, children=1)
+# print(str(wallet))
+w = wallet.keys(), wallet.values()
+
+def gen_wallet(message, css, wallet):
+
+	coin = wallet["public_key"]
+	data = "https://www.blockchain.com/btc/address/"+"32hQKijSkpC6WYSs73Y9ir6AxxMBCjkBfN"
+
+	qr = qrcode.QRCode(
+	    version = 1,
+	    error_correction = qrcode.constants.ERROR_CORRECT_H,
+	    box_size = 10,
+	    border = 4,
+	)
+
+	qr.add_data(data)
+	qr.make(fit=True)
+	img = qr.make_image()
+	img.save("image.jpg")
 
 	html = """
 	<html>
 	<link href='https://fonts.googleapis.com/css?family=Ubuntu:700italic' rel='stylesheet' type='text/css'>
 	{css}
 	<div id = "bit">{message}</div>
-	<br/>
-	<div id = "equal">Enter an amount in Dollars to be converted into Satoshis</div>
-	<form action = "convert.cgi" method = "post">
-	
- 	<div id="wrapper">
- 	<input type="text" name="USD" Value="{usd}">
-	<text>=</text>
-	<text id='result' name = "conversion">{out}</text></div><br>
-	<input id = "button" type = "submit" value = "Submit"/>
-	</form>
+	<div id = "wallet_wrapper">
+	<text>{coin}</text>
+	<img src = image.jpg>
+	</div>
 	</html>"""
-	return html.format(message=message, css=css, out = out, usd=usd)
+	return html.format(message=message, css=css, coin=coin)
 
-
-message = "USD to Satoshi"
-
+form = ""
+message = "Generate Wallet"
 php = subprocess.check_output('php price_web.php', shell=True).decode('utf-8')
 
 css = """<style>
@@ -46,6 +54,15 @@ css = """<style>
       font-family: sans-serif;
       text-align: center;      
     }
+
+    #wallet_wrapper {
+      font-size: 25px;
+      font-family: sans-serif;
+      text-align: center;
+      
+      
+      border: solid 1px;
+    }  
 
     #wrapper {
       font-size: 40px;
@@ -97,5 +114,10 @@ css = """<style>
     }
 
   </style>"""
-print(convert(message, css, php, form))
+print(gen_wallet(message, css, wallet))
 
+# contents = ""
+
+# for ele in w:
+# 	contents +=(str(ele))
+# print("<html>"+contents+"</html>")
