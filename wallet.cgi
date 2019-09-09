@@ -17,8 +17,11 @@ w = wallet.keys(), wallet.values()
 
 def gen_wallet(message, css, wallet):
 
-	coin = wallet["public_key"]
-	data = "https://www.blockchain.com/btc/address/"+"32hQKijSkpC6WYSs73Y9ir6AxxMBCjkBfN"
+	coin = wallet["wif"]
+##temporary until wallets can be understood
+	coin = "32hQKijSkpC6WYSs73Y9ir6AxxMBCjkBfN"
+
+	data = "https://www.blockchain.com/btc/address/"+coin
 
 	qr = qrcode.QRCode(
 	    version = 1,
@@ -32,6 +35,17 @@ def gen_wallet(message, css, wallet):
 	img = qr.make_image()
 	img.save("image.jpg")
 
+	table = "<table>"
+
+
+	for i in wallet:
+		table += "<tr>"
+		key, value = i, wallet[i]
+		table += "<td>"+key+"</td>"
+		table += "<td>"+str(value)+"</td>"
+		table += "</tr>"
+	table += "</table>"
+
 	html = """
 	<html>
 	<link href='https://fonts.googleapis.com/css?family=Ubuntu:700italic' rel='stylesheet' type='text/css'>
@@ -41,8 +55,11 @@ def gen_wallet(message, css, wallet):
 	<text>{coin}</text>
 	<img src = image.jpg>
 	</div>
+
+	{table}
+
 	</html>"""
-	return html.format(message=message, css=css, coin=coin)
+	return html.format(message=message, css=css, coin=coin, table=table)
 
 form = ""
 message = "Generate Wallet"
@@ -58,10 +75,10 @@ css = """<style>
     #wallet_wrapper {
       font-size: 25px;
       font-family: sans-serif;
+      margin: 0 auto;
       text-align: center;
-      
-      
       border: solid 1px;
+      width: 600px;
     }  
 
     #wrapper {
