@@ -1,4 +1,4 @@
-#!C:\Users\jackt\AppData\Local\Programs\Python\Python36\python.exe
+#!C:\xampp\htdocs\web\Environments\Bitmo\Scripts\python.exe
 print("Content-Type: text/html\n")
 
 import os

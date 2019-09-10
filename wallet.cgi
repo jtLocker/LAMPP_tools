@@ -1,4 +1,4 @@
-#!C:\Users\jackt\AppData\Local\Programs\Python\Python36\python.exe
+#!C:\xampp\htdocs\web\Environments\Bitmo\Scripts\python.exe
 print("Content-Type: text/html\n")
 
 import os
@@ -52,14 +52,14 @@ def gen_wallet(message, css, wallet):
 	{css}
 	<div id = "bit">{message}</div>
 	<div id = "wallet_wrapper">
-	<text>{coin}</text>
+	<a href = "{data}">{coin}</a>
 	<img src = image.jpg>
 	</div>
 
 	{table}
 
 	</html>"""
-	return html.format(message=message, css=css, coin=coin, table=table)
+	return html.format(message=message, css=css, coin=coin, data=data, table=table)
 
 form = ""
 message = "Generate Wallet"
