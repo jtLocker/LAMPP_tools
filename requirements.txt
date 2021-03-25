@@ -61,7 +61,7 @@ pytest==5.1.2
 python-dateutil==2.7.3
 pytz==2019.2
 pywallet==0.1.0
-PyYAML==5.1.2
+PyYAML==5.4
 qrcode==6.1
 requests==2.22.0
 scrypt==0.8.13
