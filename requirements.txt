@@ -5,7 +5,7 @@ base58==0.2.2
 beautifulsoup4==4.6.0
 bitcoinlib==0.4.10
 bs4==0.0.1
-certifi==2018.1.18
+certifi==2022.12.7
 chainside-btcpy==0.6.4
 chardet==3.0.4
 click==6.6
